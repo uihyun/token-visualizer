@@ -21,6 +21,7 @@ import org.apache.lucene.analysis.ko.dict.UserDictionary;
 
 public class Visualizer {
 
+  private String osname;
   private String exec;
   private String fileName = "graphviz_";
   private String outputPath;
@@ -34,6 +35,7 @@ public class Visualizer {
   public Visualizer(String osname, String outputPath, String modeStr, String text, String lang,
       String userDictPath) {
 
+    this.osname = osname;
     if (osname.contains("Windows")) {
       this.exec = "C:/Program Files (x86)/Graphviz2.46.1/bin/dot.exe";
     } else if (osname.contains("Linux")) {
@@ -212,9 +214,12 @@ public class Visualizer {
     try {
       runCommand(outputAbsPath, exec);
     } catch (IOException e) {
-      if (e.getMessage().contains("such file")) {
+      if (e.getMessage().contains("No such file")) {
         try {
-          runCommand(outputAbsPath, "dot");
+          if (!osname.equalsIgnoreCase("Windows"))
+            runCommand(outputAbsPath, "dot.exe");
+          else
+            runCommand(outputAbsPath, "dot");
         } catch (IOException e1) {
           System.out.println(e1.getMessage());
         }

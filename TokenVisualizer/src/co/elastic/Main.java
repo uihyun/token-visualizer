@@ -63,8 +63,8 @@ public class Main {
   }
 
   private static void help() {
-    System.out.println("Token Visualizer for Korean and Japanese");
-    System.out.println("Inatlling Graphviz is needed: https://graphviz.org/download/");
+    System.out.println("Token Visualizer for Korean(nori) and Japanese(kuromoji)");
+    System.out.println("Installing Graphviz is needed: https://graphviz.org/download/");
     System.out.println("Usage: java -jar TokenVisualizer.jar [Options]");
     System.out.println("Options:");
     System.out.println("    -h  help");
@@ -76,13 +76,13 @@ public class Main {
     System.out.println("    -d  user dictionary path");
     System.out.println();
     System.out
-        .println("Usage Example 1: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -t \"뿌리가 깊은 나무\"");
+        .println("Example 1: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -t \"뿌리가 깊은 나무\"");
     System.out
-        .println("Usage Example 2: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -m mixed -t \"뿌리가 깊은 나무\"");
+        .println("Example 2: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -m mixed -t \"뿌리가 깊은 나무\"");
     System.out
-        .println("Usage Example 3: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -l ja -t \"シンプルさは究極の洗練である\"");
+        .println("Example 3: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -l ja -t \"シンプルさは究極の洗練である\"");
     System.out
-        .println("Usage Example 3: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -l ja -t \"シンプルさは究極の洗練である\" -d /Users/elastic/Desktop/userdict.txt");
+        .println("Example 3: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -l ja -t \"シンプルさは究極の洗練である\" -d /Users/elastic/Desktop/userdict.txt");
     System.exit(0);
   }
 
