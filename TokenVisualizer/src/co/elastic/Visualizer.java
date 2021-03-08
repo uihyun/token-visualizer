@@ -217,9 +217,9 @@ public class Visualizer {
       if (e.getMessage().contains("No such file")) {
         try {
           if (!osname.equalsIgnoreCase("Windows"))
-            runCommand(outputAbsPath, "dot.exe");
-          else
             runCommand(outputAbsPath, "dot");
+          else
+            runCommand(outputAbsPath, "dot.exe");
         } catch (IOException e1) {
           System.out.println(e1.getMessage());
         }

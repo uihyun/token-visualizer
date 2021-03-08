@@ -70,7 +70,7 @@ public class Main {
     System.out.println("    -h  help");
     System.out.println("    -o  output path");
     System.out
-        .println("    -m  decompound mode: discard|none|mixed for Korean, search|normal|extended for Japanese (default: discard or search)");
+        .println("    -m  decompound mode: discard|none|mixed for Korean (default: discard), search|normal|extended for Japanese (default: search)");
     System.out.println("    -m  language: ko for Korean, ja for Japapnese (default: ko)");
     System.out.println("    -t  \"text\" you want to analyze");
     System.out.println("    -d  user dictionary path");
@@ -80,9 +80,11 @@ public class Main {
     System.out
         .println("Example 2: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -m mixed -t \"뿌리가 깊은 나무\"");
     System.out
-        .println("Example 3: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -l ja -t \"シンプルさは究極の洗練である\"");
+        .println("Example 3: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -t \"세종시는 행정 수도\" -d /Users/elastic/Desktop/userdict.txt");
     System.out
-        .println("Example 3: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -l ja -t \"シンプルさは究極の洗練である\" -d /Users/elastic/Desktop/userdict.txt");
+        .println("Example 4: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -l ja -t \"シンプルさは究極の洗練である\"");
+    System.out
+        .println("Example 5: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -l ja -t \"シンプルさは究極の洗練である\" -d /Users/elastic/Desktop/userdict.txt");
     System.exit(0);
   }
 
