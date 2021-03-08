@@ -83,6 +83,8 @@ Options:
     -d  user dictionary path
 ```
 
+It will generate two files `.dot` for Graphviz and `.jpg` that includes a Viterbi lattice result.
+
 ## Examples
 Example 1: `java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -t "뿌리가 깊은 나무"`
 
