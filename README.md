@@ -76,7 +76,7 @@ $ java -jar TokenVisualizer.jar [Options]
 ```
 Options:
     -h  help
-    -o  output path
+    -o  output path (default: current directory)
     -m  decompound mode: discard|none|mixed for Korean (default: discard), search|normal|extended for Japanese (default: search)
     -m  language: ko for Korean, ja for Japapnese (default: ko)
     -t  "text" you want to analyze
