@@ -86,13 +86,13 @@ Options:
 It will generate two files `.dot` for Graphviz and `.jpg` that includes a Viterbi lattice result.
 
 ## Examples
-Example 1: `java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -t "뿌리가 깊은 나무"`
+Example 1: `java -jar TokenVisualizer.jar -t "뿌리가 깊은 나무"`
 
 Example 2: `java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -m mixed -t "뿌리가 깊은 나무"`
 
 Example 3: `java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -t "세종시는 행정 수도" -d /Users/elastic/Desktop/user_dict.txt`
 
-Example 4: `java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -l ja -t "シンプルさは究極の洗練である"`
+Example 4: `java -jar TokenVisualizer.jar -l ja -t "シンプルさは究極の洗練である"`
 
 Example 5: `java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -l ja -t "シンプルさは究極の洗練である" -d /Users/elastic/Desktop/user_dict.txt`
 
