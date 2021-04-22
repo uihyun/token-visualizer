@@ -25,7 +25,7 @@ $ java -jar TokenVisualizer.jar -t "뿌리가 깊은 나무"
 ```
 2) シンプルさは究極の洗練である
 ```
-$ java -jar TokenVisualizer.jar -t "シンプルさは究極の洗練である"
+$ java -jar TokenVisualizer.jar -l ja -t "シンプルさは究極の洗練である"
 ```
 ![シンプルさは究極の洗練である](https://user-images.githubusercontent.com/16463710/110339172-312fbc00-806b-11eb-9c09-1fec9b9024d9.jpg)
 ```
