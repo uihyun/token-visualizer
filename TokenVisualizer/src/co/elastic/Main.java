@@ -58,6 +58,11 @@ public class Main {
       }
     }
 
+    if (text.length() == 0) {
+      System.out.println("Text should be set by using -t option.");
+      System.exit(0);
+    }
+
     Visualizer visualizer = new Visualizer(osName, outputPath, modeStr, text, lang, userDictPath);
     visualizer.vizualize();
   }
@@ -75,14 +80,12 @@ public class Main {
     System.out.println("    -t  \"text\" you want to analyze");
     System.out.println("    -d  user dictionary path");
     System.out.println();
-    System.out
-        .println("Example 1: java -jar TokenVisualizer.jar -o -t \"뿌리가 깊은 나무\"");
+    System.out.println("Example 1: java -jar TokenVisualizer.jar -o -t \"뿌리가 깊은 나무\"");
     System.out
         .println("Example 2: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -m mixed -t \"뿌리가 깊은 나무\"");
     System.out
         .println("Example 3: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -t \"세종시는 행정 수도\" -d /Users/elastic/Desktop/userdict.txt");
-    System.out
-        .println("Example 4: java -jar TokenVisualizer.jar -o -l ja -t \"シンプルさは究極の洗練である\"");
+    System.out.println("Example 4: java -jar TokenVisualizer.jar -o -l ja -t \"シンプルさは究極の洗練である\"");
     System.out
         .println("Example 5: java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -l ja -t \"シンプルさは究極の洗練である\" -d /Users/elastic/Desktop/userdict.txt");
     System.exit(0);
