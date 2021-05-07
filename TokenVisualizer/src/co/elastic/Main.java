@@ -76,7 +76,7 @@ public class Main {
     System.out.println("    -o  output path (default: current directory)");
     System.out
         .println("    -m  decompound mode: discard|none|mixed for Korean (default: discard), search|normal|extended for Japanese (default: search)");
-    System.out.println("    -m  language: ko for Korean, ja for Japapnese (default: ko)");
+    System.out.println("    -l  language: ko for Korean, ja for Japapnese (default: ko)");
     System.out.println("    -t  \"text\" you want to analyze");
     System.out.println("    -d  user dictionary path");
     System.out.println();
