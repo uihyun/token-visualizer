@@ -80,44 +80,36 @@ public class Visualizer {
   }
 
   public void vizualize() {
-
-    Tokenizer tokenizer = null;
-    FileReader fileReader = null;
-
     if (lang.equalsIgnoreCase("ja")) {
-      visualizeJapanese(tokenizer, fileReader);
+      visualizeJapanese();
     } else {
-      visualizeKorean(tokenizer, fileReader);
+      visualizeKorean();
     }
-
   }
 
-  private void visualizeKorean(Tokenizer tokenizer, FileReader fileReader) {
+  private void visualizeKorean() {
     UserDictionary userDict = null;
     GraphvizFormatter graphvizFormatter = new GraphvizFormatter(ConnectionCosts.getInstance());
 
     if (!userDictPath.equals("")) {
-      try {
-        fileReader = new FileReader(userDictPath);
+      try (FileReader fileReader = new FileReader(userDictPath)) {
         userDict = UserDictionary.open(fileReader);
       } catch (IOException e) {
         System.out.println(e.getMessage());
       }
     }
 
-    tokenizer = new KoreanTokenizer(TokenStream.DEFAULT_TOKEN_ATTRIBUTE_FACTORY, userDict, modeKo,
-                                    false, true);
-    tokenizer.setReader(new StringReader(text));
-    ((KoreanTokenizer) tokenizer).setGraphvizFormatter(graphvizFormatter);
+    try (Tokenizer tokenizer = new KoreanTokenizer(TokenStream.DEFAULT_TOKEN_ATTRIBUTE_FACTORY, userDict, modeKo,
+                                    false, true)) {
+      tokenizer.setReader(new StringReader(text));
+      ((KoreanTokenizer) tokenizer).setGraphvizFormatter(graphvizFormatter);
 
-    try {
       tokenizer.reset();
 
       while (tokenizer.incrementToken()) {
       }
 
       tokenizer.end();
-      tokenizer.close();
 
       System.out.println("------- tokenizing...");
     } catch (IOException e) {
@@ -133,33 +125,30 @@ public class Visualizer {
     convertDotToJpg(tempFile);
   }
 
-  private void visualizeJapanese(Tokenizer tokenizer, FileReader fileReader) {
+  private void visualizeJapanese() {
     org.apache.lucene.analysis.ja.dict.UserDictionary userDict = null;
     org.apache.lucene.analysis.ja.GraphvizFormatter graphvizFormatter = new org.apache.lucene.analysis.ja.GraphvizFormatter(org.apache.lucene.analysis.ja.dict.ConnectionCosts
         .getInstance());
 
     if (!userDictPath.equals("")) {
-      try {
-        fileReader = new FileReader(userDictPath);
+      try (FileReader fileReader = new FileReader(userDictPath)) {
         userDict = org.apache.lucene.analysis.ja.dict.UserDictionary.open(fileReader);
       } catch (IOException e) {
         System.out.println(e.getMessage());
       }
     }
 
-    tokenizer = new JapaneseTokenizer(TokenStream.DEFAULT_TOKEN_ATTRIBUTE_FACTORY, userDict, true,
-                                      modeJa);
-    tokenizer.setReader(new StringReader(text));
-    ((JapaneseTokenizer) tokenizer).setGraphvizFormatter(graphvizFormatter);
+    try (Tokenizer tokenizer = new JapaneseTokenizer(TokenStream.DEFAULT_TOKEN_ATTRIBUTE_FACTORY, userDict, true,
+                                      modeJa)) {
+      tokenizer.setReader(new StringReader(text));
+      ((JapaneseTokenizer) tokenizer).setGraphvizFormatter(graphvizFormatter);
 
-    try {
       tokenizer.reset();
 
       while (tokenizer.incrementToken()) {
       }
 
       tokenizer.end();
-      tokenizer.close();
 
       System.out.println("------- tokenizing...");
     } catch (IOException e) {
