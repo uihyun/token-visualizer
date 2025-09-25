@@ -219,11 +219,10 @@ public class Visualizer {
   }
 
   private void runCommand(String outputAbsPath, String exec) throws IOException {
-    String command = exec + " -Tjpg " + outputAbsPath + " -o " +
-                     outputAbsPath.substring(0, outputAbsPath.lastIndexOf(".dot")) + ".jpg";
-    Runtime runtime = Runtime.getRuntime();
-
-    runtime.exec(command);
+    String outputJpgPath = outputAbsPath.substring(0, outputAbsPath.lastIndexOf(".dot")) + ".jpg";
+    
+    ProcessBuilder processBuilder = new ProcessBuilder(exec, "-Tjpg", outputAbsPath, "-o", outputJpgPath);
+    processBuilder.start();
   }
 
 }
