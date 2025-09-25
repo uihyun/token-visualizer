@@ -78,8 +78,24 @@ Simply put, words in the dictionary have their own cost and the analyzer generat
 - Java 1.8+
 
 ## Installation
+
+### Option 1: Download Pre-built JAR
 Download `TokenVisualizer.jar` from https://github.com/uihyun/token-visualizer/releases/latest
 
+### Option 2: Build from Source
+If you want to build from source code:
+
+```bash
+git clone https://github.com/uihyun/token-visualizer.git
+cd token-visualizer
+mvn clean package
+```
+
+The executable JAR file will be created at `target/TokenVisualizer.jar`
+
+**Note**: Building requires Java 8+ and Maven 3.x
+
+### Windows Setup
 For Windows, if you see the below error,
 ```
 Cannot run program "dot.exe": error=2, No such file or directory
@@ -90,8 +106,16 @@ you need to add `<Graphviz installation path>/bin` to environment variables.
 3. Select the entry Path in the system variables section and add `C:\Program Files (x86)\GraphvizX.XX\bin` to the existing path.
 
 ## Usage
+
+### Running the Application
+If you downloaded the pre-built JAR:
 ```
 $ java -jar TokenVisualizer.jar [Options]
+```
+
+If you built from source:
+```
+$ java -jar target/TokenVisualizer.jar [Options]
 ```
 ```
 Options:
@@ -106,6 +130,8 @@ Options:
 It will generate two files `.dot` for Graphviz and `.jpg` that includes a Viterbi lattice result.
 
 ## Examples
+
+### Using Pre-built JAR
 Example 1: `java -jar TokenVisualizer.jar -t "뿌리가 깊은 나무"`
 
 Example 2: `java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -m mixed -t "뿌리가 깊은 나무"`
@@ -115,6 +141,11 @@ Example 3: `java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -t "세종�
 Example 4: `java -jar TokenVisualizer.jar -l ja -t "シンプルさは究極の洗練である"`
 
 Example 5: `java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -l ja -t "シンプルさは究極の洗練である" -d /Users/elastic/Desktop/user_dict.txt`
+
+### Using Built from Source
+If you built the project locally, replace `TokenVisualizer.jar` with `target/TokenVisualizer.jar` in all the above examples.
+
+Example: `java -jar target/TokenVisualizer.jar -t "뿌리가 깊은 나무"`
 
 ## References
 
