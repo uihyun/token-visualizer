@@ -74,8 +74,21 @@ The processing stops at each frontier (when a state has only one possible transi
 Simply put, words in the dictionary have their own cost and the analyzer generates all possible ways using the dictionary to find the most likely segmentation of any input text.
 
 ## Prerequisites
-- Graphviz from https://graphviz.org/download
-- Java 1.8+
+
+### Required
+- **Java 8 or higher** - Required to run the application
+- **Graphviz** - Required for graph visualization
+  - Download from https://graphviz.org/download
+  - Make sure `dot` command is available in your system PATH
+
+### For Building (Optional)
+- **Maven 3.x** - Only needed if building from source
+- **Git** - Only needed if cloning the repository
+
+### System Requirements
+- **Memory**: 512MB RAM minimum (more recommended for large texts)
+- **Disk Space**: 50MB for the application
+- **Network**: Not required (runs completely offline)
 
 ## Installation
 
@@ -86,14 +99,24 @@ Download `TokenVisualizer.jar` from https://github.com/uihyun/token-visualizer/r
 If you want to build from source code:
 
 ```bash
+# Clone the repository
 git clone https://github.com/uihyun/token-visualizer.git
 cd token-visualizer
+
+# Build with Maven
 mvn clean package
+
+# The executable JAR will be created at:
+# target/TokenVisualizer.jar
 ```
 
-The executable JAR file will be created at `target/TokenVisualizer.jar`
+**Build Requirements**: Java 8+ and Maven 3.x
 
-**Note**: Building requires Java 8+ and Maven 3.x
+**Build Output**:
+- Main JAR: `target/TokenVisualizer.jar` (includes all dependencies)
+- Original JAR: `target/token-visualizer-1.0.0.jar` (without dependencies)
+
+**Build Time**: Usually takes 2-3 minutes depending on your internet connection
 
 ### Windows Setup
 For Windows, if you see the below error,
@@ -107,7 +130,30 @@ you need to add `<Graphviz installation path>/bin` to environment variables.
 
 ## Usage
 
-### Running the Application
+Token Visualizer now supports two modes: **Web UI mode** and **CLI mode**.
+
+### Web UI Mode (New!)
+Simply run the JAR without any arguments to start the web server:
+```bash
+java -jar TokenVisualizer.jar
+# Open your browser and go to http://localhost:8088
+```
+
+The web interface provides:
+- Interactive text input with real-time visualization
+- Language selection (Korean/Japanese)
+- Analysis mode selection
+- User dictionary file upload
+- Instant visualization results in your browser
+
+To use a different port:
+```bash
+java -jar TokenVisualizer.jar --server.port=9090
+```
+
+### CLI Mode (Traditional)
+Run with command-line arguments for the traditional CLI interface:
+
 If you downloaded the pre-built JAR:
 ```
 $ java -jar TokenVisualizer.jar [Options]
@@ -127,7 +173,7 @@ Options:
     -d  user dictionary path
 ```
 
-It will generate two files `.dot` for Graphviz and `.jpg` that includes a Viterbi lattice result.
+CLI mode will generate two files `.dot` for Graphviz and `.jpg` that includes a Viterbi lattice result.
 
 ## Examples
 
@@ -146,6 +192,78 @@ Example 5: `java -jar TokenVisualizer.jar -o /Users/elastic/Desktop/ -l ja -t "�
 If you built the project locally, replace `TokenVisualizer.jar` with `target/TokenVisualizer.jar` in all the above examples.
 
 Example: `java -jar target/TokenVisualizer.jar -t "뿌리가 깊은 나무"`
+
+### Web UI Mode Examples
+Start the web server:
+```bash
+# Default port (8088)
+java -jar TokenVisualizer.jar
+
+# Custom port
+java -jar TokenVisualizer.jar --server.port=8090
+```
+
+Then open your browser and navigate to the specified URL to use the interactive web interface.
+
+### Web UI Features
+
+The web interface provides a modern, user-friendly way to analyze tokens:
+
+1. **Interactive Text Input**
+   - Enter Korean or Japanese text in the textarea
+   - Real-time language detection and mode suggestions
+   - Support for long text analysis
+
+2. **Language and Mode Selection**
+   - Choose between Korean (한국어) and Japanese (日本語)
+   - Mode options automatically update based on selected language:
+     - **Korean modes**: Discard (default), None, Mixed
+     - **Japanese modes**: Search (default), Normal, Extended
+
+3. **User Dictionary Upload**
+   - Optional user dictionary support via file upload
+   - Simply drag and drop or click to upload `.txt` files
+   - Custom tokenization rules for domain-specific terms
+
+4. **Advanced Visualization**
+   - Results display as interactive images
+   - **Click the image** or **"Open Full View"** button to open detailed view in new tab
+   - Full-screen analysis with zoom and pan capabilities
+
+5. **Full View Mode** (opens in new tab)
+   - **Zoom Controls**: Zoom In (+), Zoom Out (-), Reset (100%), Fit to Window
+   - **Mouse Controls**: 
+     - Ctrl/Cmd + Mouse Wheel: Zoom in/out
+     - Click and Drag: Pan around large graphs
+   - **Keyboard Shortcuts**: `+`, `-`, `0` (reset), `F` (fit to window)
+   - **Automatic Fitting**: Initially fits the visualization to window size
+
+6. **Responsive Design**
+   - Works on desktop and mobile devices
+   - Optimized for various screen sizes
+   - Modern, clean interface
+
+### How to Use Web UI
+
+1. **Start the application**:
+   ```bash
+   java -jar TokenVisualizer.jar
+   ```
+
+2. **Open your browser** and go to `http://localhost:8088`
+
+3. **Enter your text** in the text area (Korean or Japanese)
+
+4. **Select language and mode** (optional - defaults are usually good)
+
+5. **Upload user dictionary** (optional - for custom terms)
+
+6. **Click "Visualize Tokens"** to generate the analysis
+
+7. **View results**:
+   - Small preview shows in the main page
+   - Click the image or "Open Full View" for detailed analysis
+   - Use zoom and pan controls in the full view for complex graphs
 
 ## References
 

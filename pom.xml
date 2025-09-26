@@ -17,6 +17,7 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lucene.version>9.11.1</lucene.version>
+        <spring.boot.version>2.7.18</spring.boot.version>
     </properties>
 
     <dependencies>
@@ -47,6 +48,20 @@
             <artifactId>lucene-analysis-kuromoji</artifactId>
             <version>${lucene.version}</version>
         </dependency>
+
+        <!-- Spring Boot Starter Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+
+        <!-- Spring Boot Starter Thymeleaf (for web templates) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -75,7 +90,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>co.elastic.Main</mainClass>
+                                    <mainClass>co.elastic.TokenVisualizerApplication</mainClass>
                                 </transformer>
                             </transformers>
                             <finalName>TokenVisualizer</finalName>

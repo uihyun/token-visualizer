@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Token Visualization - Full View</title>
+    <style>
+        body { margin: 0; padding: 20px; background: #f8f9fa; font-family: system-ui, sans-serif; }
+        .container { background: white; border-radius: 12px; padding: 20px; }
+        .controls { position: fixed; top: 20px; right: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; gap: 10px; padding: 10px; z-index: 1000; }
+        .btn { background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+        .btn:hover { background: #5a67d8; }
+        .zoom-info { position: fixed; bottom: 20px; left: 20px; background: rgba(0,0,0,0.7); color: white; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 600; }
+        .image-container { overflow: auto; max-height: calc(100vh - 100px); border: 1px solid #e1e8ed; border-radius: 8px; cursor: move; }
+        .image-wrapper { display: inline-block; transform-origin: 0 0; }
+        img { display: block; max-width: none; height: auto; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <button class="btn" onclick="zoomIn()">Zoom In (+)</button>
+            <button class="btn" onclick="zoomOut()">Zoom Out (-)</button>
+            <button class="btn" onclick="resetZoom()">Reset (100%)</button>
+            <button class="btn" onclick="fitToWindow()">Fit to Window</button>
+        </div>
+        <div class="zoom-info" id="zoomInfo">100%</div>
+        <div class="image-container" id="imageContainer">
+            <div class="image-wrapper" id="imageWrapper">
+                <img id="fullImage" alt="Token Visualization">
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentZoom = 1;
+        let isDragging = false;
+        let startX, startY, scrollLeft, scrollTop;
+        
+        const imageContainer = document.getElementById('imageContainer');
+        const imageWrapper = document.getElementById('imageWrapper');
+        const zoomInfo = document.getElementById('zoomInfo');
+        const fullImage = document.getElementById('fullImage');
+        
+        function updateZoom() {
+            imageWrapper.style.transform = 'scale(' + currentZoom + ')';
+            zoomInfo.textContent = Math.round(currentZoom * 100) + '%';
+        }
+        
+        function zoomIn() {
+            currentZoom = Math.min(5, currentZoom + 0.25);
+            updateZoom();
+        }
+        
+        function zoomOut() {
+            currentZoom = Math.max(0.1, currentZoom - 0.25);
+            updateZoom();
+        }
+        
+        function resetZoom() {
+            currentZoom = 1;
+            updateZoom();
+            imageContainer.scrollLeft = 0;
+            imageContainer.scrollTop = 0;
+        }
+        
+        function fitToWindow() {
+            const containerWidth = imageContainer.clientWidth;
+            const containerHeight = imageContainer.clientHeight;
+            const imgWidth = fullImage.naturalWidth;
+            const imgHeight = fullImage.naturalHeight;
+            
+            const scaleX = containerWidth / imgWidth;
+            const scaleY = containerHeight / imgHeight;
+            currentZoom = Math.min(scaleX, scaleY) * 0.9;
+            
+            updateZoom();
+            imageContainer.scrollLeft = 0;
+            imageContainer.scrollTop = 0;
+        }
+        
+        // Mouse wheel zoom
+        imageContainer.addEventListener('wheel', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? -0.1 : 0.1;
+                currentZoom = Math.max(0.1, Math.min(5, currentZoom + delta));
+                updateZoom();
+            }
+        });
+        
+        // Pan functionality
+        imageContainer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            imageContainer.style.cursor = 'grabbing';
+            startX = e.pageX - imageContainer.offsetLeft;
+            startY = e.pageY - imageContainer.offsetTop;
+            scrollLeft = imageContainer.scrollLeft;
+            scrollTop = imageContainer.scrollTop;
+        });
+        
+        imageContainer.addEventListener('mouseleave', () => {
+            isDragging = false;
+            imageContainer.style.cursor = 'move';
+        });
+        
+        imageContainer.addEventListener('mouseup', () => {
+            isDragging = false;
+            imageContainer.style.cursor = 'move';
+        });
+        
+        imageContainer.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - imageContainer.offsetLeft;
+            const y = e.pageY - imageContainer.offsetTop;
+            const walkX = (x - startX) * 2;
+            const walkY = (y - startY) * 2;
+            imageContainer.scrollLeft = scrollLeft - walkX;
+            imageContainer.scrollTop = scrollTop - walkY;
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '+' || e.key === '=') zoomIn();
+            if (e.key === '-') zoomOut();
+            if (e.key === '0') resetZoom();
+            if (e.key === 'f' || e.key === 'F') fitToWindow();
+        });
+        
+        // Get image URL from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const imageUrl = urlParams.get('img');
+        if (imageUrl) {
+            fullImage.src = decodeURIComponent(imageUrl);
+            fullImage.onload = () => fitToWindow();
+        }
+    </script>
+</body>
+</html>

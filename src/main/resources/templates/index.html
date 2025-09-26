@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Visualizer - Korean(nori) and Japanese(kuromoji)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input[type="text"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 15px;
+            border: 2px dashed #e1e8ed;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .file-upload-label:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .result-container {
+            position: relative;
+            text-align: center;
+        }
+
+        .result img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .result img:hover {
+            transform: scale(1.02);
+        }
+
+        .open-fullview-btn {
+            display: inline-block;
+            margin-top: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+
+        .open-fullview-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .image-hint {
+            margin-top: 15px;
+            color: #666;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c66;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .info {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            color: #0066cc;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Token Visualizer</h1>
+            <p>Visualize Korean(nori) and Japanese(kuromoji) token analysis</p>
+        </div>
+
+        <div class="content">
+            <div class="info">
+                <strong>How to use:</strong> Enter text to analyze, select language and mode, then click Visualize. 
+                The tool will show you how Korean/Japanese text is tokenized using Lucene analyzers.
+            </div>
+
+            <form id="visualizerForm">
+                <div class="form-group">
+                    <label for="text">Text to Analyze *</label>
+                    <textarea id="text" name="text" placeholder="Enter Korean or Japanese text..." required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="language">Language</label>
+                        <select id="language" name="language">
+                            <option value="ko">Korean (한국어)</option>
+                            <option value="ja">Japanese (日本語)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mode">Analysis Mode</label>
+                        <select id="mode" name="mode">
+                            <option value="discard">Discard (Korean default)</option>
+                            <option value="none">None</option>
+                            <option value="mixed">Mixed</option>
+                            <option value="search">Search (Japanese default)</option>
+                            <option value="normal">Normal</option>
+                            <option value="extended">Extended</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userDict">User Dictionary (Optional)</label>
+                    <div class="file-upload">
+                        <input type="file" id="userDict" name="userDict" accept=".txt">
+                        <label for="userDict" class="file-upload-label">
+                            <span id="fileLabel">📁 Click to upload user dictionary file (.txt)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn" id="submitBtn">Visualize Tokens</button>
+                </div>
+            </form>
+
+            <div class="error" id="errorMsg"></div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing text and generating visualization...</p>
+            </div>
+
+            <div class="result" id="result">
+                <h3>Token Visualization Result</h3>
+                <div class="result-container">
+                    <img id="resultImage" src="" alt="Token visualization" title="Click to view in full size">
+                    <p class="image-hint">Click the image or button below to view in full detail</p>
+                    <button class="open-fullview-btn" id="openFullView">🔍 Open Full View in New Tab</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('visualizerForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            const errorMsg = document.getElementById('errorMsg');
+            const resultImage = document.getElementById('resultImage');
+            const languageSelect = document.getElementById('language');
+            const modeSelect = document.getElementById('mode');
+            const userDictInput = document.getElementById('userDict');
+            const fileLabel = document.getElementById('fileLabel');
+            const openFullViewBtn = document.getElementById('openFullView');
+            
+            let currentImageUrl = null;
+
+            // Update mode options based on language
+            languageSelect.addEventListener('change', function() {
+                const language = this.value;
+                const modeOptions = {
+                    ko: [
+                        { value: 'discard', text: 'Discard (default)', selected: true },
+                        { value: 'none', text: 'None' },
+                        { value: 'mixed', text: 'Mixed' }
+                    ],
+                    ja: [
+                        { value: 'search', text: 'Search (default)', selected: true },
+                        { value: 'normal', text: 'Normal' },
+                        { value: 'extended', text: 'Extended' }
+                    ]
+                };
+
+                modeSelect.innerHTML = '';
+                modeOptions[language].forEach(option => {
+                    const optionElement = document.createElement('option');
+                    optionElement.value = option.value;
+                    optionElement.textContent = option.text;
+                    if (option.selected) optionElement.selected = true;
+                    modeSelect.appendChild(optionElement);
+                });
+            });
+
+            // Initialize mode options
+            languageSelect.dispatchEvent(new Event('change'));
+
+            // File upload label update
+            userDictInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    fileLabel.textContent = `📄 ${this.files[0].name}`;
+                } else {
+                    fileLabel.textContent = '📁 Click to upload user dictionary file (.txt)';
+                }
+            });
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const text = document.getElementById('text').value.trim();
+                if (!text) {
+                    showError('Please enter text to analyze');
+                    return;
+                }
+
+                hideError();
+                hideResult();
+                showLoading();
+                disableSubmit();
+
+                const formData = new FormData();
+                formData.append('text', text);
+                formData.append('language', document.getElementById('language').value);
+                formData.append('mode', document.getElementById('mode').value);
+                
+                if (userDictInput.files.length > 0) {
+                    formData.append('userDict', userDictInput.files[0]);
+                }
+
+                fetch('/api/visualize', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to generate visualization');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    currentImageUrl = URL.createObjectURL(blob);
+                    resultImage.src = currentImageUrl;
+                    resultImage.onload = function() {
+                        showResult();
+                    };
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showError('Failed to generate visualization. Please check your input and try again.');
+                })
+                .finally(() => {
+                    hideLoading();
+                    enableSubmit();
+                });
+            });
+
+            function showLoading() {
+                loading.style.display = 'block';
+            }
+
+            function hideLoading() {
+                loading.style.display = 'none';
+            }
+
+            function showResult() {
+                result.style.display = 'block';
+            }
+
+            function hideResult() {
+                result.style.display = 'none';
+            }
+
+            function showError(message) {
+                errorMsg.textContent = message;
+                errorMsg.style.display = 'block';
+            }
+
+            function hideError() {
+                errorMsg.style.display = 'none';
+            }
+
+            function disableSubmit() {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Processing...';
+            }
+
+            function enableSubmit() {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Visualize Tokens';
+            }
+
+            // Full view functionality
+            function openFullView() {
+                if (!currentImageUrl) return;
+                
+                const encodedImageUrl = encodeURIComponent(currentImageUrl);
+                const fullViewUrl = '/fullview.html?img=' + encodedImageUrl;
+                window.open(fullViewUrl, '_blank');
+            }
+
+            // Event listeners for full view
+            openFullViewBtn.addEventListener('click', openFullView);
+            resultImage.addEventListener('click', openFullView);
+        });
+    </script>
+</body>
+</html>
