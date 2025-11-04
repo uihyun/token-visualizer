@@ -132,7 +132,7 @@ you need to add `<Graphviz installation path>/bin` to environment variables.
 
 Token Visualizer now supports two modes: **Web UI mode** and **CLI mode**.
 
-### Web UI Mode (New!)
+### Web UI Mode
 Simply run the JAR without any arguments to start the web server:
 ```bash
 java -jar TokenVisualizer.jar
@@ -150,6 +150,8 @@ To use a different port:
 ```bash
 java -jar TokenVisualizer.jar --server.port=9090
 ```
+
+<img width="2064" height="1628" alt="image" src="https://github.com/user-attachments/assets/1279e796-911a-4977-ba70-16a3e775a9d7" />
 
 ### CLI Mode (Traditional)
 Run with command-line arguments for the traditional CLI interface:
